@@ -76600,7 +76600,7 @@
     <div id="input_container" style="margin-left: 10px;">
       <div class="row g-3 align-items-center">
             <div class="col-auto">
-            <label for="inputPassword6" class="col-form-label"><b>Enter your team rank:</b></label>
+            <label for="inputPassword6" class="col-form-label"><h2>Enter your team rank:</h2></label>
             </div>
             <div class="col-auto">
             <input type="number" id="team_rank" class="form-control" aria-describedby="passwordHelpInline">
@@ -76608,6 +76608,36 @@
             <div class="col-auto">
                   <button type="button" class="btn btn-primary" onclick="search()">Search</button>
             </div>
+      </div>
+      <div style="background-color: black; margin-top: 20px; width: 1515px; height: 10px;" >
+            &nbsp;
+      </div>
+      <h1></h1>
+      <h4>Colleges above you including you and their frequency &#8595;</h4>
+      <div id="college_list">
+            <table class="college_list_table table table-striped">
+                  <!-- <thead>
+                    <tr>
+                      <th scope="col">College Name</th>
+                      <th scope="col">Frequency</th>
+                    </tr>
+                  </thead> -->
+                  <!-- <tbody id="college_list_table_body">
+                    <tr>
+                      <td>Mark</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                      <td>Jacob</td>
+                      <td>@fat</td>
+                    </tr>
+                    <tr>
+                      <td>Larry</td>
+                      <td>@twitter</td>
+                    </tr>
+                  </tbody>  -->
+
+            </table>
       </div>
     </div>
 
@@ -76629,12 +76659,15 @@
             const team_rank = document.querySelector('#team_rank').value;
             if(team_rank === "") {
                   alert("Bhai kuch dal to sahi search krne ke liye!!");
+            } else if(team_rank <= 0) {
+                  alert("Amma behen pe aa jaunga main tumhare!");
             } else if(team_rank <= 10) {
                   alert("Kya gareeb ki maja le rahe bhai! Top 10 teams are already selected!");
                   // unse upar wale team dikha de unko
             } else if(team_rank > 1000) {
                   alert("Sorry guyz! Apki rank find krne ke liye logic hi nahi likha!");
             } else if(team_rank <= 135) {
+
                   let included = [], ptr = 0, ans = 10, count = {}, flag = 0, clg_name;
                   for(let i = 0; i < 10; ++i) {
                         if(count[store[i]] == undefined)
@@ -76649,14 +76682,40 @@
                               }
                         }
                         if(count[store[i]] == undefined || count[store[i]] <= 2) {
+                              
                               count[store[i]] = count[store[i]] ? count[store[i]] + 1 : 1;
                               ans++;
                         }
                   }
+
                   if(flag == 1) {
                         alert(`Top 3 teams from your college [${clg_name}] are already selected! Sorry!`);
-                  } else 
+                  } else {
+                        
+                        if(document.querySelector(".college_list_table").rows.length != 0) { 
+                              let tc = document.querySelector(".college_list_table").rows.length;
+                              while(tc--) {
+                                    document.querySelector(".college_list_table").deleteRow(0);
+                              }
+                        }       
+
+                        console.log(count);
+                        for (const key in count) {
+                              if (count.hasOwnProperty(key)) {
+                                    const table = document.querySelector('.college_list_table');
+                                    const row = table.insertRow(-1);
+
+                                    let c1 = row.insertCell(0);
+                                    let c2 = row.insertCell(1);
+
+                                    c1.innerText = key;
+                                    c2.innerText = count[key];
+                              }
+                        }
+                        
                         alert(`Your team rank is ${ans}`);
+                  }
+
                   // ans is the rank
             } else {
                   let included = [], ptr = 0, ans = 10, count = {}, flag = 0, clg_name;
@@ -76667,6 +76726,9 @@
                   }
                   for (let i = 10; i < 135; ++i) {
                         if(count[store[i]] == undefined || count[store[i]] <= 2) {
+                              if(!included.includes(store[i])) {
+                                    included.push(store[i]);
+                              }
                               count[store[i]] = count[store[i]] ? count[store[i]] + 1 : 1;
                               ans++;
                         }
@@ -76679,6 +76741,9 @@
                               }
                         }
                         if(count[store[i]] == undefined) {
+                              if(!included.includes(store[i])) {
+                                    included.push(store[i]);
+                              }
                               count[store[i]] = count[store[i]] ? count[store[i]] + 1 : 1;
                               ans++;
                         }
@@ -76686,9 +76751,33 @@
 
                   if(flag == 1) {
                         alert(`Top 3 teams from your college [${clg_name}] are already selected! Sorry!`);
-                  } else 
+                  } else {
+
+                        if(document.querySelector(".college_list_table").rows.length != 0) { 
+                              let tc = document.querySelector(".college_list_table").rows.length;
+                              while(tc--) {
+                                    document.querySelector(".college_list_table").deleteRow(0);
+                              }
+                        }       
+
+                        console.log(count);
+                        for (const key in count) {
+                              if (count.hasOwnProperty(key)) {
+                                    const table = document.querySelector('.college_list_table');
+                                    const row = table.insertRow(-1);
+
+                                    let c1 = row.insertCell(0);
+                                    let c2 = row.insertCell(1);
+
+                                    c1.innerText = key;
+                                    c2.innerText = count[key];
+                              }
+                        }
+
                         alert(`Your team rank is ${ans}`);
+                  }
                   // ans is the rank
+                  store = [];
             }
       }
 
